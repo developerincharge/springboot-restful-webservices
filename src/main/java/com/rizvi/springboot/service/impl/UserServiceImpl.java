@@ -1,6 +1,8 @@
 package com.rizvi.springboot.service.impl;
 
+import com.rizvi.springboot.dto.UserDto;
 import com.rizvi.springboot.entity.User;
+import com.rizvi.springboot.mapper.UserMapper;
 import com.rizvi.springboot.repository.UserRepository;
 import com.rizvi.springboot.service.UserService;
 import lombok.AllArgsConstructor;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -17,31 +20,39 @@ public class UserServiceImpl implements UserService {
       private UserRepository userRepository;
 
     @Override
-    public User createUser(User user) {
-        return  userRepository.save(user);
+    public UserDto createUser(UserDto userDto) {
 
+        // convertUserDto into User Jpa Entity
+         User user = UserMapper.mapToUser(userDto);
+         User savedUser = userRepository.save(user);
+         // convert User Jpa Entity into UserDto
+         UserDto savedUserDto = UserMapper.mapToUserDto(savedUser);
+           return savedUserDto;
     }
 
     @Override
-    public User getUserById(Long userId) {
+    public UserDto getUserById(Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
-        return optionalUser.get();
+         User user =optionalUser.get();
+         return UserMapper.mapToUserDto(user);
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(UserMapper::mapToUserDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public User updateUser(User user) {
-        User existingUser = userRepository.findById(user.getId()).get();
+    public UserDto updateUser(UserDto userDto) {
+        User existingUser = userRepository.findById(userDto.getId()).get();
 
-         existingUser.setFirstName(user.getFirstName());
-         existingUser.setLastName(user.getLastName());
-         existingUser.setEmail(user.getEmail());
+         existingUser.setFirstName(userDto.getFirstName());
+         existingUser.setLastName(userDto.getLastName());
+         existingUser.setEmail(userDto.getEmail());
          User updatedUser = userRepository.save(existingUser);
-        return updatedUser;
+        return UserMapper.mapToUserDto(updatedUser);
     }
 
     @Override

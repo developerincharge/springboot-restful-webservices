@@ -1,10 +1,13 @@
 package com.rizvi.springboot.entity;
 
+import com.rizvi.springboot.dto.UserDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter

@@ -1,5 +1,6 @@
 package com.rizvi.springboot.controller;
 
+import com.rizvi.springboot.dto.UserDto;
 import com.rizvi.springboot.entity.User;
 import com.rizvi.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,28 +23,28 @@ public class UserController {
 
 
        @PostMapping
-        public ResponseEntity<User> createUser(@RequestBody User user){
-          User savedUser =  userService.createUser(user);
+        public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
+          UserDto savedUser =  userService.createUser(userDto);
           return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
       }
 
        @GetMapping("/{id}")
-        public ResponseEntity<User> getUserById(@PathVariable ("id") Long userId){
-          User user =  userService.getUserById(userId);
+        public ResponseEntity<UserDto> getUserById(@PathVariable ("id") Long userId){
+          UserDto user =  userService.getUserById(userId);
           return new ResponseEntity<>(user, HttpStatus.OK);
       }
 
       @GetMapping
-        public ResponseEntity<List<User>> getAllUsers(){
-          List<User> users =  userService.getAllUsers();
+        public ResponseEntity<List<UserDto>> getAllUsers(){
+          List<UserDto> users =  userService.getAllUsers();
           return new ResponseEntity<>(users, HttpStatus.OK);
       }
 
       @PutMapping("{id}")
-        public ResponseEntity<User> updateUser(@PathVariable ("id") Long userId, @RequestBody User user){
+        public ResponseEntity<UserDto> updateUser(@PathVariable ("id") Long userId, @RequestBody UserDto userDto){
 
-          user.setId(userId);
-          User updatedUser =  userService.updateUser(user);
+          userDto.setId(userId);
+          UserDto updatedUser =  userService.updateUser(userDto);
           return new ResponseEntity<>(updatedUser, HttpStatus.OK);
       }
 
